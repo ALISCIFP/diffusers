@@ -617,7 +617,7 @@ class StableDiffusionPipeline(DiffusionPipeline, TextualInversionLoaderMixin, Lo
         eta: float = 0.0,
         generator: Optional[Union[torch.Generator, List[torch.Generator]]] = None,
         latents: Optional[torch.FloatTensor] = None,
-        DDIM_latents:Optional[torch.FloatTensor] = None,
+        ddim_latents: Optional[torch.FloatTensor] = None,
         attention_map_mask:Optional[torch.FloatTensor] = None,
         prompt_embeds: Optional[torch.FloatTensor] = None,
         negative_prompt_embeds: Optional[torch.FloatTensor] = None,
@@ -822,7 +822,7 @@ class StableDiffusionPipeline(DiffusionPipeline, TextualInversionLoaderMixin, Lo
 
                 # compute the previous noisy sample x_t -> x_t-1
                 latents = self.scheduler.step(noise_pred, t, latents, **extra_step_kwargs, return_dict=False)[0]
-                latents = attention_map_mask * DDIM_latents[-2-i] + (
+                latents = attention_map_mask * ddim_latents[-2-i] + (
                         ones_tensor - attention_map_mask) * latents
                 if callback_on_step_end is not None:
                     callback_kwargs = {}
